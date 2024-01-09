@@ -1,14 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     android:layout_height="match_parent"
-    tools:context=".Frag_Recive">
+    tools:context=".Frag_Send">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="0dp"
+        android:id="@+id/RecyclerviewRecive"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/custom_tolid_items_barghashtkharid"
+        android:layout_weight="12"/>
 
-</FrameLayout>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_margin="16dp"
+        android:textSize="16sp"
+
+        android:text="افزودن"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:fontFamily="@font/iransansmoobile_fanum"
+        app:icon="@drawable/baseline_add_24"
+        app:iconGravity="textStart"
+        style="@style/Widget.MaterialComponents.Button.Icon"
+        android:layout_height="0dp" />
+</LinearLayout>
