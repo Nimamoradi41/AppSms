@@ -9,14 +9,22 @@ import com.Atiran.Anbar.Tables.SendSms
     fun GetSendSms(): List<SendSms>
 
 
-   @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun Inser_SendSms(anb: SendSms)
+
+
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertSendSms(sendSmsList: SendSms): Long
+
+
 
     @Query("DELETE FROM SendSms")
     fun nukeTable();
 
-    @Update
-    fun updateSendSms(anb:SendSms)
+
+
+   @Query("UPDATE SendSms SET Number = :Number WHERE iddatabase = :id2")
+   fun updateSendSms(Number:String,id2:Int) :Int
+
 
     @Delete()
     fun Delet_SendSms(anb: SendSms)

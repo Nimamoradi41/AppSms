@@ -16,7 +16,7 @@ import com.Atiran.Anbar.Tables.SendSms;
 
 
 @Database(entities = {ReciveSms.class, SendSms.class
-},exportSchema = false,version = 1)
+},exportSchema = false,version = 2)
 
 abstract   public class dataabse extends RoomDatabase {
     static  String namedab="appsmsdatabase";

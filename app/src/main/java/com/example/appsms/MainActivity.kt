@@ -15,6 +15,8 @@ class MainActivity : AppCompatActivity() {
     private var viewPager: ViewPager? = null
     private var tabLayout: TabLayout? = null
 
+
+
     @SuppressLint("MissingInflatedId")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         viewPager?.setAdapter(
             SampleFragmentPagerAdapter(
                 supportFragmentManager,
-                this@MainActivity
+                this@MainActivity,this
             )
         )
 

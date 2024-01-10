@@ -5,6 +5,8 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 import com.Atiran.Anbar.Tables.SendSms
@@ -13,11 +15,18 @@ import com.Atiran.Anbar.Tables.SendSms
 class Adapter_NumbersSend(var C:Context) : RecyclerView.Adapter<Adapter_NumbersSend.view>() {
 
     var Flag=true
-    var list:ArrayList<SendSms>?=null
+    var list:List<SendSms>?=null
     var holder=""
+
+    var edit:Edit ? =null
     init {
 
         list=ArrayList<SendSms>()
+    }
+
+    fun  Click( d:Edit)
+    {
+        this.edit=d
     }
     class view(itemView: View) : RecyclerView.ViewHolder(itemView)
 
@@ -29,21 +38,26 @@ class Adapter_NumbersSend(var C:Context) : RecyclerView.Adapter<Adapter_NumbersS
 
     override fun onBindViewHolder(holder: view, position: Int) {
 
-//        var Item=list?.get(position)
+        var Item=list?.get(position)
+
+
+        var textView3= holder.itemView.findViewById<TextView>(R.id.textView3)
+        var imageView2= holder.itemView.findViewById<ImageView>(R.id.imageView2)
 
 
 
 
-
-
-//        if (Item?.Active!!)
-//        {
-//            holder.itemView.backk_color.setBackgroundColor(Color.parseColor("#335A9318"))
-//        }
+        if (!Item?.Number.toString().isNullOrEmpty())
+        {
+           textView3.setText(Item?.Number)
+        }
 
 
 
 
+        imageView2.setOnClickListener {
+            edit?.EditItem(Item!!)
+        }
 
 
 
@@ -57,8 +71,13 @@ class Adapter_NumbersSend(var C:Context) : RecyclerView.Adapter<Adapter_NumbersS
 
     }
 
+
+
+    interface  Edit {
+        fun  EditItem(edit:SendSms)
+    }
     override fun getItemCount(): Int {
-//     return list?.size!!
-     return 10
+     return list?.size!!
+//     return 10
     }
 }

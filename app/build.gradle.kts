@@ -40,20 +40,28 @@ android {
 
 dependencies {
 
-//    implementation ("android.arch.persistence.room:runtime:1.1.1")
-
-
-
+    // Room
+    implementation ("android.arch.persistence.room:runtime:1.1.1")
     //noinspection GradleCompatible,GradleCompatible,GradleCompatible
-//    implementation ("androidx.room:room-runtime:2.6.1")
-//    annotationProcessor "androidx.room:room-compiler:2.3.0"
+    implementation ("androidx.room:room-runtime:2.6.1")
+    annotationProcessor ("androidx.room:room-compiler:2.6.1")
     implementation ("android.arch.persistence.room:runtime:1.1.1")
     implementation ("android.arch.lifecycle:extensions:1.1.1")
-//    kapt "android.arch.lifecycle:compiler:1.1.0"
+    //noinspection LifecycleAnnotationProcessorWithJava8
+//    kapt ("android.arch.lifecycle:compiler:1.1.1")
 //    kapt "android.arch.persistence.room:compiler:1.0.0"
-//    kapt "android.arch.persistence.room:compiler:1.1.1"
+//    kapt ("android.arch.persistence.room:compiler:1.1.1")
     //noinspection GradleCompatible,GradleCompatible
     implementation ("androidx.room:room-guava:2.6.1")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
+    /// Room
+
+    implementation ("androidx.lifecycle:lifecycle-extensions:2.2.0")
+    //noinspection LifecycleAnnotationProcessorWithJava8
+    kapt ("androidx.lifecycle:lifecycle-compiler:2.7.0-rc02")
+    implementation ("androidx.room:room-runtime:2.6.1")
+    kapt ("androidx.room:room-compiler:2.6.1")
 
 
 //    implementation("androidx.core:core-ktx:1.12.0")
