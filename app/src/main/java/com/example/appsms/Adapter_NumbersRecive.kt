@@ -5,6 +5,8 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.Atiran.Anbar.Tables.ReciveSms
 
@@ -14,12 +16,22 @@ import com.Atiran.Anbar.Tables.SendSms
 class Adapter_NumbersRecive(var C:Context) : RecyclerView.Adapter<Adapter_NumbersRecive.view>() {
 
     var Flag=true
-    var list:ArrayList<ReciveSms>?=null
+    var list:List<ReciveSms>?=null
     var holder=""
+    interface  Edit {
+        fun  EditItem(edit:ReciveSms)
+        fun  RemoveItem(edit:ReciveSms)
+    }
+    var edit: Adapter_NumbersRecive.Edit? =null
     init {
 
         list=ArrayList<ReciveSms>()
     }
+    fun  Click( d: Adapter_NumbersRecive.Edit)
+    {
+        this.edit=d
+    }
+
     class view(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): view {
@@ -30,36 +42,39 @@ class Adapter_NumbersRecive(var C:Context) : RecyclerView.Adapter<Adapter_Number
 
     override fun onBindViewHolder(holder: view, position: Int) {
 
-//        var Item=list?.get(position)
+
+        var Item=list?.get(position)
+
+
+        var textView3= holder.itemView.findViewById<TextView>(R.id.textView3)
+        var imageView2= holder.itemView.findViewById<ImageView>(R.id.imageView2)
+        var imageView= holder.itemView.findViewById<ImageView>(R.id.imageView)
 
 
 
 
-
-
-//        if (Item?.Active!!)
-//        {
-//            holder.itemView.backk_color.setBackgroundColor(Color.parseColor("#335A9318"))
-//        }
-
+        if (!Item?.Number.toString().isNullOrEmpty())
+        {
+           textView3.setText(Item?.Number)
+        }
 
 
 
 
+        imageView2.setOnClickListener {
+            edit?.EditItem(Item!!)
+        }
 
-
-
-
-
-
-
+        imageView.setOnClickListener {
+            edit?.RemoveItem(Item!!)
+        }
 
 
 
     }
 
     override fun getItemCount(): Int {
-//     return list?.size!!
-     return 10
+     return list?.size!!
+//     return 10
     }
 }

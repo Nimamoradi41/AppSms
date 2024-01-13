@@ -2,20 +2,81 @@ package com.example.appsms
 
 
 import android.annotation.SuppressLint
+import android.app.ActivityManager
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.telephony.SmsManager
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.viewpager.widget.ViewPager
+import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.tabs.TabLayout
 
 
 class MainActivity : AppCompatActivity() {
     private var viewPager: ViewPager? = null
     private var tabLayout: TabLayout? = null
+    private var materialSwitch: MaterialSwitch? = null
 
 
+
+
+    fun CheckPermisionsApp() : ArrayList<Int>{
+        var i=ArrayList<Int>();
+
+
+        if (ActivityCompat.checkSelfPermission(this,android.Manifest.permission.FOREGROUND_SERVICE)!=PackageManager.PERMISSION_GRANTED)
+        {
+            i.add(1)
+        }
+
+        if (ActivityCompat.checkSelfPermission(this,android.Manifest.permission.POST_NOTIFICATIONS)!=PackageManager.PERMISSION_GRANTED)
+        {
+            i.add(2)
+
+        }
+
+        if (ActivityCompat.checkSelfPermission(this,android.Manifest.permission.READ_PHONE_STATE)!=PackageManager.PERMISSION_GRANTED)
+        {
+            i.add(3)
+
+        }
+
+        if (ActivityCompat.checkSelfPermission(this,android.Manifest.permission.READ_SMS)!=PackageManager.PERMISSION_GRANTED)
+        {
+            i.add(4)
+
+        }
+
+        if (ActivityCompat.checkSelfPermission(this,android.Manifest.permission.SEND_SMS)!=PackageManager.PERMISSION_GRANTED)
+        {
+            i.add(5)
+
+        }
+
+
+        if (ActivityCompat.checkSelfPermission(this,android.Manifest.permission.RECEIVE_SMS)!=PackageManager.PERMISSION_GRANTED)
+        {
+            i.add(6)
+
+        }
+
+        if (ActivityCompat.checkSelfPermission(this,android.Manifest.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK)!=PackageManager.PERMISSION_GRANTED)
+        {
+            i.add(7)
+
+        }
+
+
+
+
+
+        return  i
+
+    }
 
     @SuppressLint("MissingInflatedId")
     @RequiresApi(Build.VERSION_CODES.O)
@@ -26,6 +87,7 @@ class MainActivity : AppCompatActivity() {
 
         tabLayout=findViewById(R.id.tabLayout);
         viewPager=findViewById(R.id.viewpagermain);
+        materialSwitch=findViewById(R.id.materialSwitch);
         tabLayout?.setupWithViewPager(viewPager)
 
         viewPager?.setAdapter(
@@ -35,9 +97,42 @@ class MainActivity : AppCompatActivity() {
             )
         )
 
+
+        materialSwitch?.isChecked = isMyServiceRunning(SMSForegroundService::class.java)
+
         tabLayout?.setupWithViewPager(viewPager);
         tabLayout?.getTabAt(0)?.setIcon(R.drawable.baseline_download_24)
         tabLayout?.getTabAt(1)?.setIcon(R.drawable.baseline_upload_24)
+
+
+
+        materialSwitch?.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked)
+            {
+                var Per=CheckPermisionsApp()
+                if (Per.isEmpty())
+                {
+                    val serviceIntent = Intent(this, SMSForegroundService::class.java)
+                    startService(serviceIntent)
+                }else{
+
+                    requestPermissions(arrayOf(
+                        android.Manifest.permission.POST_NOTIFICATIONS,
+                        android.Manifest.permission.FOREGROUND_SERVICE,
+                        android.Manifest.permission.READ_PHONE_STATE,
+                        android.Manifest.permission.READ_SMS,
+                        android.Manifest.permission.SEND_SMS,
+                        android.Manifest.permission.RECEIVE_SMS,
+                        android.Manifest.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK,
+                    ),7)
+                }
+            }else{
+                stopService(Intent(this,SMSForegroundService::class.java))
+            }
+
+        }
+
+
 
 //        findViewById<Button>(R.id.Btn1).setOnClickListener {
 //
@@ -154,6 +249,17 @@ class MainActivity : AppCompatActivity() {
 
 //        // لغو ثبت رسیور در اکتیویتی
 //        unregisterReceiver(smsReceiver)
+    }
+
+
+    private fun isMyServiceRunning(serviceClass: Class<*>): Boolean {
+        val manager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
+        for (service in manager.getRunningServices(Int.MAX_VALUE)) {
+            if (serviceClass.name == service.service.className) {
+                return true
+            }
+        }
+        return false
     }
 }
 

@@ -19,6 +19,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
+import com.Atiran.Anbar.Tables.ReciveSms
 import com.Atiran.Anbar.Tables.SendSms
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.*
@@ -32,42 +33,42 @@ class Frag_Send(var act:Activity) : Fragment() {
     var  database : dataabse?=null
 
 
-//    public fun Dialapp(S: String,S2:String,S3:String, I: Dial_App.Interface_new, context: Context): Dialog {
-//        var d = Dialog(context)
-//
-//        val inflater = LayoutInflater.from(context)
-//        val view: View = inflater.inflate(R.layout.custome_dial_app, null, false)
-//        d.setContentView(view)
-//        d.window?.setLayout(
-//            ConstraintLayout.LayoutParams.MATCH_PARENT,
-//            ConstraintLayout.LayoutParams.MATCH_PARENT)
-//        d.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-//
-//        var textView4=view.findViewById<TextView>(R.id.textView4)
-//        var button2=view.findViewById<TextView>(R.id.button2)
-//        var button=view.findViewById<TextView>(R.id.button)
-//
-//        textView4.setText(S3)
-////            view.button8.setText(S)
-//
-//
-//
-//
-//
-////            view.button7.setText(S2)
-//
-//
-//
-//        button2.setOnClickListener {
-//            d.dismiss()
-//            I.News("0","")
-//        }
-//        button.setOnClickListener {
-//            d.dismiss()
-//            I.News("1","")
-//        }
-//        return d
-//    }
+    public fun Dialapp(S: String,S2:String,S3:String, I: Dial_App.Interface_new, context: Context,edit:SendSms): Dialog {
+        var d = Dialog(context)
+
+        val inflater = LayoutInflater.from(context)
+        val view: View = inflater.inflate(R.layout.custome_dial_app, null, false)
+        d.setContentView(view)
+        d.window?.setLayout(
+            ConstraintLayout.LayoutParams.MATCH_PARENT,
+            ConstraintLayout.LayoutParams.MATCH_PARENT)
+        d.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        var textView4=view.findViewById<TextView>(R.id.textView4)
+        var button2=view.findViewById<TextView>(R.id.button2)
+        var button=view.findViewById<TextView>(R.id.button)
+
+        textView4.setText(S3)
+//            view.button8.setText(S)
+
+
+
+
+
+//            view.button7.setText(S2)
+
+
+
+        button2.setOnClickListener {
+            d.dismiss()
+            I.NewsSendSms("0","",edit)
+        }
+        button.setOnClickListener {
+            d.dismiss()
+            I.NewsSendSms("1","",edit)
+        }
+        return d
+    }
     public fun DialappAdd(S: String,S2:String,S3:String, I: Dial_App.Interface_new, context: Context,boolean: Boolean,S4: String,edit:SendSms): Dialog {
         var d = Dialog(context)
 
@@ -102,7 +103,7 @@ class Frag_Send(var act:Activity) : Fragment() {
 
         Close.setOnClickListener {
             d.dismiss()
-            I.News("0","", SendSms())
+            I.NewsSendSms("0","", SendSms())
         }
         button.setOnClickListener {
             if (editTextPhone.text.isEmpty())
@@ -111,7 +112,7 @@ class Frag_Send(var act:Activity) : Fragment() {
                 return@setOnClickListener
             }
             d.dismiss()
-            I.News("1",editTextPhone.text.toString(),edit)
+            I.NewsSendSms("1",editTextPhone.text.toString(),edit)
         }
         return d
     }
@@ -154,17 +155,39 @@ class Frag_Send(var act:Activity) : Fragment() {
 
         return  Edited
     }
+
+
+
+    suspend fun  DeleteNumberDatBase (number:SendSms): Boolean {
+
+
+        var  Edited=true
+
+        var L=   database?.SendSmsDaoAccess()?.Delet_SendSms(number,
+        )
+
+
+
+//        if (L!! >0)
+//        {
+//            Edited=true
+//        }
+
+        return  Edited
+    }
      @OptIn(DelicateCoroutinesApi::class)
      public fun  AddNumberSend(){
         var D=DialappAdd("","","",object : Dial_App.Interface_new{
-            override fun News(Type: String, num: String,Edit:SendSms) {
+
+
+            override fun NewsSendSms(Type: String, num: String, Edit: SendSms) {
                 if (Type.equals("1"))
                 {
                     GlobalScope.launch{
                         Log.i("NIMa","A")
-                var  Res= async {
-                           Addnumber(num)
-                       }
+                        var  Res= async {
+                            Addnumber(num)
+                        }
 
                         var Rs=Res.await();
                         if (Rs)
@@ -179,6 +202,10 @@ class Frag_Send(var act:Activity) : Fragment() {
 
                 }
             }
+
+            override fun NewsReciveSms(Type: String, num: String, Edit: ReciveSms) {
+
+            }
         }, requireContext(),false,"",SendSms()).show()
     }
 
@@ -186,7 +213,9 @@ class Frag_Send(var act:Activity) : Fragment() {
 
     fun  EditNumber(number:SendSms){
         var D=DialappAdd("","","",object : Dial_App.Interface_new{
-            override fun News(Type: String, num: String,Edit :SendSms) {
+
+
+            override fun NewsSendSms(Type: String, num: String, Edit: SendSms) {
                 if (Type.equals("1"))
                 {
                     GlobalScope.launch{
@@ -205,22 +234,20 @@ class Frag_Send(var act:Activity) : Fragment() {
 
                 }
             }
+
+            override fun NewsReciveSms(Type: String, num: String, Edit: ReciveSms) {
+
+            }
         }, requireContext(),true, number.Number.toString(),number).show()
     }
-//    fun  DeleteNumber(number:String){
-//        var D=Dialapp("بله","خیر","آیا میخواهید از قسمت تولید خارج شوید؟",object : Dial_App.Interface_new{
-//            override fun News(Type: String,sv: String) {
-//                if (Type.equals("1"))
-//                {
-//
-//                }
-//            }
-//        }, requireContext(),true).show()
-//    }
 
 
 
 
+
+
+
+    @SuppressLint("NotifyDataSetChanged")
     fun  GetAllSends(){
 
         runBlocking {
@@ -232,11 +259,8 @@ class Frag_Send(var act:Activity) : Fragment() {
 
                 var Rs=Res.await();
                 withContext(Dispatchers.Main) {
-                    if (Rs.isNotEmpty())
-                    {
-                        adapter?.list=Rs
-                        adapter?.notifyDataSetChanged()
-                    }
+                    adapter?.list=Rs
+                    adapter?.notifyDataSetChanged()
                 }
             }
         }
@@ -270,6 +294,38 @@ class Frag_Send(var act:Activity) : Fragment() {
         adapter?.Click(object :Adapter_NumbersSend.Edit{
             override fun EditItem(edit: SendSms) {
                 EditNumber(edit)
+            }
+
+            override fun RemoveItem(edit: SendSms) {
+
+                var D=Dialapp("","","",object : Dial_App.Interface_new{
+
+
+                    override fun NewsSendSms(Type: String, num: String, Edit: SendSms) {
+                        if (Type.equals("1"))
+                        {
+
+                            GlobalScope.launch{
+                                var  Res= async {
+                                    DeleteNumberDatBase(Edit)
+                                }
+
+                                var Rs=Res.await();
+                                if (Rs)
+                                {
+                                    GetAllSends()
+                                }
+
+
+                            }
+
+                        }
+                    }
+
+                    override fun NewsReciveSms(Type: String, num: String, Edit: ReciveSms) {
+
+                    }
+                }, requireContext(),edit).show()
             }
 
         })

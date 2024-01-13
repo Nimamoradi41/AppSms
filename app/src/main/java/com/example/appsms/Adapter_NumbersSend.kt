@@ -43,6 +43,7 @@ class Adapter_NumbersSend(var C:Context) : RecyclerView.Adapter<Adapter_NumbersS
 
         var textView3= holder.itemView.findViewById<TextView>(R.id.textView3)
         var imageView2= holder.itemView.findViewById<ImageView>(R.id.imageView2)
+        var imageView= holder.itemView.findViewById<ImageView>(R.id.imageView)
 
 
 
@@ -58,6 +59,12 @@ class Adapter_NumbersSend(var C:Context) : RecyclerView.Adapter<Adapter_NumbersS
         imageView2.setOnClickListener {
             edit?.EditItem(Item!!)
         }
+
+        imageView.setOnClickListener {
+            edit?.RemoveItem(Item!!)
+        }
+
+
 
 
 
@@ -75,6 +82,7 @@ class Adapter_NumbersSend(var C:Context) : RecyclerView.Adapter<Adapter_NumbersS
 
     interface  Edit {
         fun  EditItem(edit:SendSms)
+        fun  RemoveItem(edit:SendSms)
     }
     override fun getItemCount(): Int {
      return list?.size!!

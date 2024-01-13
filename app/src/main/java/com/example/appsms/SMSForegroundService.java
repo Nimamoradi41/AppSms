@@ -1,5 +1,7 @@
 package com.example.appsms;
 
+import static android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK;
+
 import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -59,8 +61,8 @@ public class SMSForegroundService extends Service {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_launcher_background)
-                .setContentTitle("عنوان اعلان")
-                .setContentText("متن اعلان")
+                .setContentTitle("سرویس پیامکی")
+                .setContentText("در حال کار..")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
 
@@ -70,7 +72,13 @@ public class SMSForegroundService extends Service {
 //        notificationManager.notify(NOTIFICATION_ID, builder.build());
 
 
-        startForeground(2, builder.build());
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            startForeground(2, builder.build());
+        } else {
+            startForeground(2, builder.build(),
+                    FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK);
+        }
+
 
 
 
