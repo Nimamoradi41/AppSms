@@ -22,8 +22,13 @@ import androidx.core.app.NotificationManagerCompat;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.Atiran.Anbar.Tables.ReciveSms;
+import com.Atiran.Anbar.Tables.SendSms;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class SMSForegroundService extends Service {
 
@@ -48,6 +53,7 @@ public class SMSForegroundService extends Service {
         // لغو ثبت رسیور در زمان مختصر
         unregisterReceiver(smsReceiver);
     }
+
 
     @SuppressLint("WrongConstant")
     @Override
@@ -83,7 +89,7 @@ public class SMSForegroundService extends Service {
 
 
 
-        Toast.makeText(this, "onStartCommand", Toast.LENGTH_SHORT).show();
+
 
 
 
@@ -99,24 +105,85 @@ public class SMSForegroundService extends Service {
                 if (intent.getAction().equals(Telephony.Sms.Intents.SMS_RECEIVED_ACTION)) {
                     SmsMessage[] messages = Telephony.Sms.Intents.getMessagesFromIntent(intent);
                     for (SmsMessage smsMessage : messages) {
-                        String sender = smsMessage.getDisplayOriginatingAddress();
-                        String messageBody = smsMessage.getDisplayMessageBody();
-                        SmsManager smsManager = SmsManager.getDefault();
-                        ArrayList<String> body=new ArrayList<>();
-//                        body.add("فرامرز منم دارم تست میکنم");
-                        messageBody="فرامرز منم دارم تست میکنم";
-                        try {
-                            smsManager.sendTextMessage(
-                                    "09166561171",
-                                    null,
-                                    messageBody,
-                                    null,
-                                    null
-                            );
-                        }catch (Exception s)
-                        {
-                           Log.i("dvsv",s.getMessage());
-                        }
+
+
+
+                        Thread thread=new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                try {
+                                    dataabse Temp= dataabse.getInstances(getApplicationContext());
+
+                                    List<ReciveSms> NumbersR=Temp.ReciveSmsDaoAccess().GetReciveSms();
+
+
+                                    if (!NumbersR.isEmpty())
+                                    {
+                                        String SmsNumber = smsMessage.getDisplayOriginatingAddress();
+//
+
+                                        if (SmsNumber.startsWith("+98"))
+                                        {
+                                            SmsNumber=SmsNumber.replace("+98","");
+                                        }
+
+                                        if (!SmsNumber.startsWith("0"))
+                                        {
+                                            SmsNumber="0"+SmsNumber;
+                                        }
+
+                                         boolean Finded=false;
+
+                                        for (int i=0;i<NumbersR.size();i++)
+                                        {
+                                            if (NumbersR.get(i).getNumber().equals(SmsNumber))
+                                            {
+                                                Finded=true;
+                                                break;
+                                            }
+                                        }
+
+                                        if (Finded)
+                                        {
+                                            String messageBody = smsMessage.getDisplayMessageBody();
+                                            SmsManager smsManager = SmsManager.getDefault();
+
+
+                                            List<SendSms> NumbersS=Temp.SendSmsDaoAccess().GetSendSms();
+
+
+                                            for (int i=0;i<NumbersS.size();i++)
+                                            {
+                                                messageBody=messageBody;
+                                                smsManager.sendTextMessage(
+                                                        NumbersS.get(i).getNumber(),
+                                                        null,
+                                                        messageBody,
+                                                        null,
+                                                        null
+                                                );
+                                            }
+
+                                        }
+
+                                    }
+
+
+
+
+                                } catch (Exception InterruptedException) {
+
+                                }
+                            }
+                        });
+                        thread.start();
+
+
+
+
+
+
 
 
                         // اینجا می‌توانید اقدامات مرتبط با دریافت پیام اس‌ام‌اس انجام دهید

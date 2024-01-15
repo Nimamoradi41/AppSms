@@ -194,12 +194,7 @@ class Frag_Send(var act:Activity) : Fragment() {
                         {
                             GetAllSends();
                         }
-
-
-
-
                     }
-
                 }
             }
 
@@ -287,9 +282,11 @@ class Frag_Send(var act:Activity) : Fragment() {
 
 
         AddSend?.setOnClickListener {
-
             AddNumberSend()
         }
+
+
+
         adapter= Adapter_NumbersSend(requireContext())
         adapter?.Click(object :Adapter_NumbersSend.Edit{
             override fun EditItem(edit: SendSms) {
@@ -315,13 +312,9 @@ class Frag_Send(var act:Activity) : Fragment() {
                                 {
                                     GetAllSends()
                                 }
-
-
                             }
-
                         }
                     }
-
                     override fun NewsReciveSms(Type: String, num: String, Edit: ReciveSms) {
 
                     }
