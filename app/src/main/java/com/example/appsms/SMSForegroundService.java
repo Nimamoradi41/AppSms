@@ -40,7 +40,6 @@ public class SMSForegroundService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Toast.makeText(this, "Start", Toast.LENGTH_SHORT).show();
         // ثبت رسیور برای دریافت پیام‌های SMS
     }
 
@@ -49,7 +48,6 @@ public class SMSForegroundService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Toast.makeText(this, "Finish", Toast.LENGTH_SHORT).show();
         // لغو ثبت رسیور در زمان مختصر
         unregisterReceiver(smsReceiver);
     }
@@ -129,6 +127,10 @@ public class SMSForegroundService extends Service {
                                         }
 
 
+                                        if (!SmsNumber.startsWith("0"))
+                                        {
+                                            SmsNumber="0"+SmsNumber;
+                                        }
 
 
                                          boolean Finded=false;

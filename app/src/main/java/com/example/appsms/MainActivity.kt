@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.telephony.SmsManager
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -105,17 +106,20 @@ class MainActivity : AppCompatActivity() {
         tabLayout?.getTabAt(1)?.setIcon(R.drawable.baseline_upload_24)
 
 
+        materialSwitch?.setOnClickListener {
 
-        materialSwitch?.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked)
+            var Per=CheckPermisionsApp()
+            var ddd=materialSwitch?.isChecked
+            if (materialSwitch?.isChecked!!)
             {
                 var Per=CheckPermisionsApp()
-                if (Per.isEmpty())
+                if (Per.size<=1)
                 {
+                    materialSwitch?.isChecked=true
                     val serviceIntent = Intent(this, SMSForegroundService::class.java)
                     startService(serviceIntent)
                 }else{
-
+                    materialSwitch?.isChecked=false
                     requestPermissions(arrayOf(
                         android.Manifest.permission.POST_NOTIFICATIONS,
                         android.Manifest.permission.FOREGROUND_SERVICE,
@@ -125,12 +129,14 @@ class MainActivity : AppCompatActivity() {
                         android.Manifest.permission.RECEIVE_SMS,
                         android.Manifest.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK,
                     ),7)
+
                 }
             }else{
+                materialSwitch?.isChecked=false
                 stopService(Intent(this,SMSForegroundService::class.java))
             }
-
         }
+
 
 
 
