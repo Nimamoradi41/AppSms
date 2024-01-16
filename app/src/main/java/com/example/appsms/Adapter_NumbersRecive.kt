@@ -46,6 +46,7 @@ class Adapter_NumbersRecive(var C:Context) : RecyclerView.Adapter<Adapter_Number
         var Item=list?.get(position)
 
 
+        var textView6= holder.itemView.findViewById<TextView>(R.id.textView6)
         var textView3= holder.itemView.findViewById<TextView>(R.id.textView3)
         var imageView2= holder.itemView.findViewById<ImageView>(R.id.imageView2)
         var imageView= holder.itemView.findViewById<ImageView>(R.id.imageView)
@@ -53,9 +54,15 @@ class Adapter_NumbersRecive(var C:Context) : RecyclerView.Adapter<Adapter_Number
 
 
 
+        if (!Item?.Name.toString().isNullOrEmpty())
+        {
+            textView3.setText(Item?.Name)
+        }
+
+
         if (!Item?.Number.toString().isNullOrEmpty())
         {
-           textView3.setText(Item?.Number)
+            textView6.setText(Item?.Number)
         }
 
 

@@ -17,9 +17,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.Atiran.Anbar.Tables.ReciveSms
 import com.Atiran.Anbar.Tables.SendSms
+import com.google.android.material.internal.ViewUtils.showKeyboard
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -70,14 +73,18 @@ class Frag_Recive : Fragment() {
 
         button2.setOnClickListener {
             d.dismiss()
-            I.NewsReciveSms("0","",edit)
+            I.NewsReciveSms("0",ReciveSms(),edit)
         }
         button.setOnClickListener {
             d.dismiss()
-            I.NewsReciveSms("1","",edit)
+            I.NewsReciveSms("1",ReciveSms(),edit)
         }
         return d
     }
+    fun showKeyboard(V:View) {
+        ViewCompat.getWindowInsetsController(V)?.show(WindowInsetsCompat.Type.ime())
+    }
+    @SuppressLint("MissingInflatedId")
     public fun DialappAdd(S: String, S2:String, S3:String, I: Dial_App.Interface_new, context: Context, boolean: Boolean, S4: String, edit: ReciveSms): Dialog {
         var d = Dialog(context)
 
@@ -92,27 +99,23 @@ class Frag_Recive : Fragment() {
         var Close=view.findViewById<ImageView>(R.id.imageView3)
 
         var button=view.findViewById<TextView>(R.id.button)
-        var editTextPhone=view.findViewById<TextView>(R.id.editTextPhone)
+        var editTextPhone=view.findViewById<TextView>(R.id.editTextPhone2)
+        var editTextPhonename=view.findViewById<TextView>(R.id.editTextPhone)
 
 
+
+        showKeyboard(editTextPhone)
         if (boolean)
         {
-            editTextPhone.setText(S4)
+            editTextPhone.setText(edit.Number)
+            editTextPhonename.setText(edit.Name)
         }
-
-//            view.button8.setText(S)
-
-
-
-
-
-//            view.button7.setText(S2)
 
 
 
         Close.setOnClickListener {
             d.dismiss()
-            I.NewsReciveSms("0","", ReciveSms())
+            I.NewsReciveSms("0", ReciveSms(), ReciveSms())
         }
         button.setOnClickListener {
             if (editTextPhone.text.isEmpty())
@@ -120,8 +123,24 @@ class Frag_Recive : Fragment() {
                 Toast.makeText(requireContext(),"شماره را وارد کنید", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+
+            if (editTextPhonename.text.isEmpty())
+            {
+                Toast.makeText(requireContext(),"نام شماره را وارد کنید", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+
+
+            var Temp=ReciveSms()
+            Temp.Name=editTextPhonename.text.toString()
+            Temp.Number=editTextPhone.text.toString()
+
+
+
+
             d.dismiss()
-            I.NewsReciveSms("1",editTextPhone.text.toString(),edit)
+            I.NewsReciveSms("1",Temp,edit)
         }
         return d
     }
@@ -129,13 +148,12 @@ class Frag_Recive : Fragment() {
 
 
 
-    suspend fun  Addnumber (number:String): Boolean {
+    suspend fun  Addnumber (number:ReciveSms): Boolean {
 
         var AddOrNot=false
-        var Sendn= ReciveSms()
-        Sendn.Number=number
 
-        var L=   database?.ReciveSmsDaoAccess()?.Inser_SendSms(Sendn)
+
+        var L=   database?.ReciveSmsDaoAccess()?.Inser_SendSms(number)
 
 
         if (L!! >0)
@@ -189,16 +207,16 @@ class Frag_Recive : Fragment() {
     @OptIn(DelicateCoroutinesApi::class)
     public fun  AddNumberSend(){
         var D=DialappAdd("","","",object : Dial_App.Interface_new{
-            override fun NewsSendSms(Type: String, num: String, Edit: SendSms) {
+            override fun NewsSendSms(Type: String, num: SendSms, Edit: SendSms) {
 
             }
 
 
-            override fun NewsReciveSms(Type: String, num: String, Edit: ReciveSms) {
+            override fun NewsReciveSms(Type: String, num: ReciveSms, Edit: ReciveSms) {
                 if (Type.equals("1"))
                 {
                     GlobalScope.launch{
-                        Log.i("NIMa","A")
+
                         var  Res= async {
                             Addnumber(num)
                         }
@@ -225,13 +243,15 @@ class Frag_Recive : Fragment() {
         var D=DialappAdd("","","",object : Dial_App.Interface_new{
 
 
-            override fun NewsSendSms(Type: String, num: String, Edit: SendSms) {
+            override fun NewsSendSms(Type: String, num: SendSms, Edit: SendSms) {
 
             }
 
-            override fun NewsReciveSms(Type: String, num: String, Edit: ReciveSms) {
+            override fun NewsReciveSms(Type: String, num: ReciveSms, Edit: ReciveSms) {
                 if (Type.equals("1"))
                 {
+                    Edit.Number=num.Number
+                    Edit.Name=num.Name
                     GlobalScope.launch{
                         var  Res= async {
                             Editnumber(Edit)
@@ -304,16 +324,29 @@ class Frag_Recive : Fragment() {
         ReciveBtn=MainView.findViewById(R.id.ReciveBtn);
 
 
+
         adapter= Adapter_NumbersRecive(requireContext())
         RecyclerviewSend?.adapter=adapter
 
+
         database= dataabse.getInstances(activity)
 
+
+
+
+
         GetAllSends();
+
+
 
         ReciveBtn?.setOnClickListener {
             AddNumberSend()
         }
+
+
+
+
+
         adapter= Adapter_NumbersRecive(requireContext())
         adapter?.Click(object :Adapter_NumbersRecive.Edit{
             override fun EditItem(edit: ReciveSms) {
@@ -321,14 +354,14 @@ class Frag_Recive : Fragment() {
             }
             override fun RemoveItem(edit: ReciveSms) {
 
-                var D=Dialapp("","","",object : Dial_App.Interface_new{
+                var D=Dialapp("","","آیا مطمئن هستید؟",object : Dial_App.Interface_new{
 
 
-                    override fun NewsSendSms(Type: String, num: String, Edit: SendSms) {
+                    override fun NewsSendSms(Type: String, num: SendSms, Edit: SendSms) {
 
                     }
 
-                    override fun NewsReciveSms(Type: String, num: String, Edit: ReciveSms) {
+                    override fun NewsReciveSms(Type: String, num: ReciveSms, Edit: ReciveSms) {
                         if (Type.equals("1"))
                         {
 
@@ -353,8 +386,6 @@ class Frag_Recive : Fragment() {
 
         })
         RecyclerviewSend?.adapter=adapter
-
-
         return  MainView
     }
 

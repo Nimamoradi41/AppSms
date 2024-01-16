@@ -37,33 +37,33 @@ class Adapter_NumbersSend(var C:Context) : RecyclerView.Adapter<Adapter_NumbersS
     }
 
     override fun onBindViewHolder(holder: view, position: Int) {
-
-        var Item=list?.get(position)
-
-
-        var textView3= holder.itemView.findViewById<TextView>(R.id.textView3)
-        var imageView2= holder.itemView.findViewById<ImageView>(R.id.imageView2)
-        var imageView= holder.itemView.findViewById<ImageView>(R.id.imageView)
-
-
-
-
-        if (!Item?.Number.toString().isNullOrEmpty())
-        {
-           textView3.setText(Item?.Number)
-        }
-
-
-
-
-        imageView2.setOnClickListener {
-            edit?.EditItem(Item!!)
-        }
-
-        imageView.setOnClickListener {
-            edit?.RemoveItem(Item!!)
-        }
-
+//
+//        var Item=list?.get(position)
+//
+//
+//        var textView3= holder.itemView.findViewById<TextView>(R.id.textView3)
+//        var imageView2= holder.itemView.findViewById<ImageView>(R.id.imageView2)
+//        var imageView= holder.itemView.findViewById<ImageView>(R.id.imageView)
+//
+//
+//
+//
+//        if (!Item?.Number.toString().isNullOrEmpty())
+//        {
+//           textView3.setText(Item?.Number)
+//        }
+//
+//
+//
+//
+//        imageView2.setOnClickListener {
+//            edit?.EditItem(Item!!)
+//        }
+//
+//        imageView.setOnClickListener {
+//            edit?.RemoveItem(Item!!)
+//        }
+//
 
 
 
