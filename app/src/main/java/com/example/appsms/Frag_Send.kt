@@ -294,6 +294,7 @@ class Frag_Send(var act:Activity) : Fragment() {
 
 
 
+
         adapter= Adapter_NumbersSend(requireContext())
         adapter?.Click(object :Adapter_NumbersSend.Edit{
             override fun EditItem(edit: SendSms) {
@@ -328,12 +329,10 @@ class Frag_Send(var act:Activity) : Fragment() {
             }
 
         })
-
         RecyclerviewSend?.adapter=adapter
-
-
-
         return  MainView
+
+
     }
 
 
