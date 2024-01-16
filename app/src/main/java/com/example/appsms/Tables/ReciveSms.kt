@@ -16,6 +16,9 @@ import androidx.room.PrimaryKey
     @ColumnInfo(name="Number")
     var Number :String ?=null
 
+    @ColumnInfo(name="Name")
+    var Name :String ?=null
+
 
 
 }

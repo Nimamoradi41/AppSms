@@ -22,8 +22,8 @@ class Dial_App(var Type: Int, var S: String, var I: Interface_new, context: Cont
 
 
     public interface Interface_new{
-        public fun NewsSendSms(Type:String,num:String,Edit : SendSms)
-        public fun NewsReciveSms(Type:String,num:String,Edit : ReciveSms)
+        public fun NewsSendSms(Type:String,Add : SendSms,Edit : SendSms)
+        public fun NewsReciveSms(Type:String,num:ReciveSms,Edit : ReciveSms)
     }
 
 

@@ -13,8 +13,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -63,11 +65,11 @@ class Frag_Send(var act:Activity) : Fragment() {
 
         button2.setOnClickListener {
             d.dismiss()
-            I.NewsSendSms("0","",edit)
+            I.NewsSendSms("0", SendSms(),edit)
         }
         button.setOnClickListener {
             d.dismiss()
-            I.NewsSendSms("1","",edit)
+            I.NewsSendSms("1", SendSms(),edit)
         }
         return d
     }
@@ -83,9 +85,21 @@ class Frag_Send(var act:Activity) : Fragment() {
         d.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         var Close=view.findViewById<ImageView>(R.id.imageView3)
+        var spinner=view.findViewById<Spinner>(R.id.spinner)
 
         var button=view.findViewById<TextView>(R.id.button)
         var editTextPhone=view.findViewById<TextView>(R.id.editTextPhone)
+
+
+
+
+        val adapter = ArrayAdapter(context, android.R.layout.simple_spinner_item,arrayOf("گزینه 1", "گزینه 2", "گزینه 3", "گزینه 4"))
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+
+
+        spinner.adapter = adapter
+
 
 
         showKeyboard(editTextPhone)
@@ -106,7 +120,7 @@ class Frag_Send(var act:Activity) : Fragment() {
 
         Close.setOnClickListener {
             d.dismiss()
-            I.NewsSendSms("0","", SendSms())
+            I.NewsSendSms("0", SendSms(), SendSms())
         }
         button.setOnClickListener {
             if (editTextPhone.text.isEmpty())
@@ -115,7 +129,7 @@ class Frag_Send(var act:Activity) : Fragment() {
                 return@setOnClickListener
             }
             d.dismiss()
-            I.NewsSendSms("1",editTextPhone.text.toString(),edit)
+            I.NewsSendSms("1", SendSms(),edit)
         }
         return d
     }
@@ -123,13 +137,12 @@ class Frag_Send(var act:Activity) : Fragment() {
 
 
 
-    suspend fun  Addnumber (number:String): Boolean {
+    suspend fun  Addnumber (number:SendSms): Boolean {
 
        var AddOrNot=false
-        var Sendn= SendSms()
-        Sendn.Number=number
 
-       var L=   database?.SendSmsDaoAccess()?.insertSendSms(Sendn)
+
+       var L=   database?.SendSmsDaoAccess()?.insertSendSms(number)
 
 
         if (L!! >0)
@@ -183,7 +196,7 @@ class Frag_Send(var act:Activity) : Fragment() {
         var D=DialappAdd("","","",object : Dial_App.Interface_new{
 
 
-            override fun NewsSendSms(Type: String, num: String, Edit: SendSms) {
+            override fun NewsSendSms(Type: String, num: SendSms, Edit: SendSms) {
                 if (Type.equals("1"))
                 {
                     GlobalScope.launch{
@@ -201,7 +214,7 @@ class Frag_Send(var act:Activity) : Fragment() {
                 }
             }
 
-            override fun NewsReciveSms(Type: String, num: String, Edit: ReciveSms) {
+            override fun NewsReciveSms(Type: String, num: ReciveSms, Edit: ReciveSms) {
 
             }
         }, requireContext(),false,"",SendSms()).show()
@@ -213,10 +226,10 @@ class Frag_Send(var act:Activity) : Fragment() {
         var D=DialappAdd("","","",object : Dial_App.Interface_new{
 
 
-            override fun NewsSendSms(Type: String, num: String, Edit: SendSms) {
+            override fun NewsSendSms(Type: String, num: SendSms, Edit: SendSms) {
                 if (Type.equals("1"))
                 {
-                    Edit.Number=num
+                    Edit.Number=num.Number
                     GlobalScope.launch{
                         var  Res= async {
                             Editnumber(Edit)
@@ -234,7 +247,7 @@ class Frag_Send(var act:Activity) : Fragment() {
                 }
             }
 
-            override fun NewsReciveSms(Type: String, num: String, Edit: ReciveSms) {
+            override fun NewsReciveSms(Type: String, num: ReciveSms, Edit: ReciveSms) {
 
             }
         }, requireContext(),true, number.Number.toString(),number).show()
@@ -248,14 +261,11 @@ class Frag_Send(var act:Activity) : Fragment() {
 
     @SuppressLint("NotifyDataSetChanged")
     fun  GetAllSends(){
-
         runBlocking {
             GlobalScope.launch{
                 var  Res= async {
                     GetAllSendNumbers()
                 }
-
-
                 var Rs=Res.await();
                 withContext(Dispatchers.Main) {
                     adapter?.list=Rs
@@ -306,7 +316,7 @@ class Frag_Send(var act:Activity) : Fragment() {
                 var D=Dialapp("","","آیا مطمئن هستید؟",object : Dial_App.Interface_new{
 
 
-                    override fun NewsSendSms(Type: String, num: String, Edit: SendSms) {
+                    override fun NewsSendSms(Type: String, num: SendSms, Edit: SendSms) {
                         if (Type.equals("1"))
                         {
 
@@ -323,7 +333,7 @@ class Frag_Send(var act:Activity) : Fragment() {
                             }
                         }
                     }
-                    override fun NewsReciveSms(Type: String, num: String, Edit: ReciveSms) {
+                    override fun NewsReciveSms(Type: String, num: ReciveSms, Edit: ReciveSms) {
 
                     }
                 }, requireContext(),edit).show()
