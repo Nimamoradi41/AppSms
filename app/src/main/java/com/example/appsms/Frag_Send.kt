@@ -271,6 +271,7 @@ class Frag_Send(var act:Activity) : Fragment() {
         ViewCompat.getWindowInsetsController(V)?.show(WindowInsetsCompat.Type.ime())
     }
 
+
     @OptIn(DelicateCoroutinesApi::class)
     @SuppressLint("MissingInflatedId", "NotifyDataSetChanged")
     override   fun onCreateView(
@@ -331,8 +332,6 @@ class Frag_Send(var act:Activity) : Fragment() {
         })
         RecyclerviewSend?.adapter=adapter
         return  MainView
-
-
     }
 
 
