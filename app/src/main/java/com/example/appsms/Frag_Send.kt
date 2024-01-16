@@ -18,6 +18,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.Atiran.Anbar.Tables.ReciveSms
 import com.Atiran.Anbar.Tables.SendSms
@@ -86,6 +88,7 @@ class Frag_Send(var act:Activity) : Fragment() {
         var editTextPhone=view.findViewById<TextView>(R.id.editTextPhone)
 
 
+        showKeyboard(editTextPhone)
         if (boolean)
         {
             editTextPhone.setText(S4)
@@ -213,6 +216,7 @@ class Frag_Send(var act:Activity) : Fragment() {
             override fun NewsSendSms(Type: String, num: String, Edit: SendSms) {
                 if (Type.equals("1"))
                 {
+                    Edit.Number=num
                     GlobalScope.launch{
                         var  Res= async {
                             Editnumber(Edit)
@@ -263,6 +267,9 @@ class Frag_Send(var act:Activity) : Fragment() {
     suspend fun GetAllSendNumbers() : List<SendSms> {
       return    database?.SendSmsDaoAccess()?.GetSendSms()!!;
     }
+    fun showKeyboard(V:View) {
+        ViewCompat.getWindowInsetsController(V)?.show(WindowInsetsCompat.Type.ime())
+    }
 
     @OptIn(DelicateCoroutinesApi::class)
     @SuppressLint("MissingInflatedId", "NotifyDataSetChanged")
@@ -292,10 +299,9 @@ class Frag_Send(var act:Activity) : Fragment() {
             override fun EditItem(edit: SendSms) {
                 EditNumber(edit)
             }
-
             override fun RemoveItem(edit: SendSms) {
 
-                var D=Dialapp("","","",object : Dial_App.Interface_new{
+                var D=Dialapp("","","آیا مطمئن هستید؟",object : Dial_App.Interface_new{
 
 
                     override fun NewsSendSms(Type: String, num: String, Edit: SendSms) {
@@ -322,6 +328,7 @@ class Frag_Send(var act:Activity) : Fragment() {
             }
 
         })
+
         RecyclerviewSend?.adapter=adapter
 
 

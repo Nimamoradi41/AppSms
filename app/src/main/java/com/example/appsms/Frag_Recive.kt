@@ -17,9 +17,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.Atiran.Anbar.Tables.ReciveSms
 import com.Atiran.Anbar.Tables.SendSms
+import com.google.android.material.internal.ViewUtils.showKeyboard
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -78,6 +81,9 @@ class Frag_Recive : Fragment() {
         }
         return d
     }
+    fun showKeyboard(V:View) {
+        ViewCompat.getWindowInsetsController(V)?.show(WindowInsetsCompat.Type.ime())
+    }
     public fun DialappAdd(S: String, S2:String, S3:String, I: Dial_App.Interface_new, context: Context, boolean: Boolean, S4: String, edit: ReciveSms): Dialog {
         var d = Dialog(context)
 
@@ -95,20 +101,12 @@ class Frag_Recive : Fragment() {
         var editTextPhone=view.findViewById<TextView>(R.id.editTextPhone)
 
 
+
+        showKeyboard(editTextPhone)
         if (boolean)
         {
             editTextPhone.setText(S4)
         }
-
-//            view.button8.setText(S)
-
-
-
-
-
-//            view.button7.setText(S2)
-
-
 
         Close.setOnClickListener {
             d.dismiss()
@@ -232,6 +230,7 @@ class Frag_Recive : Fragment() {
             override fun NewsReciveSms(Type: String, num: String, Edit: ReciveSms) {
                 if (Type.equals("1"))
                 {
+                    Edit.Number=num
                     GlobalScope.launch{
                         var  Res= async {
                             Editnumber(Edit)
@@ -321,7 +320,7 @@ class Frag_Recive : Fragment() {
             }
             override fun RemoveItem(edit: ReciveSms) {
 
-                var D=Dialapp("","","",object : Dial_App.Interface_new{
+                var D=Dialapp("","","آیا مطمئن هستید؟",object : Dial_App.Interface_new{
 
 
                     override fun NewsSendSms(Type: String, num: String, Edit: SendSms) {

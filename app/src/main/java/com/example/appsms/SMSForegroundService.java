@@ -109,7 +109,6 @@ public class SMSForegroundService extends Service {
                         Thread thread=new Thread(new Runnable() {
                             @Override
                             public void run() {
-
                                 try {
                                     dataabse Temp= dataabse.getInstances(getApplicationContext());
 
@@ -124,13 +123,14 @@ public class SMSForegroundService extends Service {
                                         if (SmsNumber.startsWith("+98"))
                                         {
                                             SmsNumber=SmsNumber.replace("+98","");
+                                            if (!SmsNumber.startsWith("0"))
+                                            {
+                                                SmsNumber="0"+SmsNumber;
+                                            }
                                         }
 
 
-                                        if (!SmsNumber.startsWith("0"))
-                                        {
-                                            SmsNumber="0"+SmsNumber;
-                                        }
+
 
 
                                          boolean Finded=false;
