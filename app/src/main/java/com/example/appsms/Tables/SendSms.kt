@@ -11,8 +11,23 @@ import androidx.room.PrimaryKey
     var iddatabase:Int ?=null
 
 
+
+
+   @ColumnInfo(name="idNumberRecive")
+   var idNumberRecive:Int ?=null
+
+
+    @ColumnInfo(name="NameReciveNumber")
+    var NameReciveNumber:String ?=null
+
+
+
     @ColumnInfo(name="Number")
     var Number :String ?=null
+
+
+    @ColumnInfo(name="Name")
+    var Name :String ?=null
 
 
 

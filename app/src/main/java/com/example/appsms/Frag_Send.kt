@@ -4,15 +4,14 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
-import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ImageView
@@ -22,11 +21,13 @@ import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.Atiran.Anbar.Tables.ReciveSms
 import com.Atiran.Anbar.Tables.SendSms
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.*
+
 
 @Suppress("UNREACHABLE_CODE")
 class Frag_Send(var act:Activity) : Fragment() {
@@ -73,9 +74,22 @@ class Frag_Send(var act:Activity) : Fragment() {
         }
         return d
     }
+
+
+
+
+
+
+
+
+    suspend fun GetAllRecivNumbers() : List<ReciveSms> {
+        return    database?.ReciveSmsDaoAccess()?.GetReciveSms()!!;
+    }
+
     public fun DialappAdd(S: String,S2:String,S3:String, I: Dial_App.Interface_new, context: Context,boolean: Boolean,S4: String,edit:SendSms): Dialog {
         var d = Dialog(context)
 
+        var Selected=-1
         val inflater = LayoutInflater.from(context)
         val view: View = inflater.inflate(R.layout.custome_dial_app_add, null, false)
         d.setContentView(view)
@@ -88,24 +102,75 @@ class Frag_Send(var act:Activity) : Fragment() {
         var spinner=view.findViewById<Spinner>(R.id.spinner)
 
         var button=view.findViewById<TextView>(R.id.button)
-        var editTextPhone=view.findViewById<TextView>(R.id.editTextPhone)
+        var editTextName=view.findViewById<TextView>(R.id.editTextPhone)
+        var editTextPhone=view.findViewById<TextView>(R.id.editTextPhone2)
+
+
+
+        if (boolean!!)
+        {
+            spinner.isVisible=false
+        }
+
+        var ListItems=ArrayList<String>()
+        var MainList= ArrayList<ReciveSms>()
+
+        runBlocking {
+            GlobalScope.launch{
+                var  Res= async {
+                    GetAllRecivNumbers()
+                }
+
+
+                var Rs=Res.await();
+                MainList= Rs as ArrayList<ReciveSms>
+                withContext(Dispatchers.Main) {
+
+                    Rs.forEach {
+                        ListItems.add(it.Number+" "+it.Name)
+                    }
+
+
+                    val adapter = ArrayAdapter(context, android.R.layout.simple_spinner_item,ListItems)
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+
+
+                    spinner.adapter = adapter
+                    spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(
+                            parentView: AdapterView<*>?,
+                            selectedItemView: View,
+                            position: Int,
+                            id: Long
+                        ) {
+
+                            Selected=position
+                        }
+
+                        override fun onNothingSelected(parentView: AdapterView<*>?) {
+                            // در صورتی که هیچ موردی انتخاب نشده باشد
+                        }
+                    }
+
+                }
+            }
+        }
 
 
 
 
-        val adapter = ArrayAdapter(context, android.R.layout.simple_spinner_item,arrayOf("گزینه 1", "گزینه 2", "گزینه 3", "گزینه 4"))
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
 
 
-        spinner.adapter = adapter
 
 
 
         showKeyboard(editTextPhone)
         if (boolean)
         {
-            editTextPhone.setText(S4)
+            editTextPhone.setText(edit.Number)
+            editTextName.setText(edit.Name)
         }
 
 //            view.button8.setText(S)
@@ -128,11 +193,44 @@ class Frag_Send(var act:Activity) : Fragment() {
                 Toast.makeText(requireContext(),"شماره را وارد کنید",Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+
+
+            if (editTextName.text.isEmpty())
+            {
+                Toast.makeText(requireContext(),"نام شماره  را وارد کنید",Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+
+            if (!boolean)
+            {
+                if (Selected==-1)
+                {
+                    Toast.makeText(requireContext(),"سرشماره دریافتی را وارد کنید",Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+            }
+
+
+
+            var Temp=SendSms()
+            Temp.Name=editTextName.text.toString()
+            Temp.Number=editTextPhone.text.toString()
+
+            if (!boolean)
+            {
+                Temp.idNumberRecive=MainList.get(Selected).iddatabase
+                Temp.NameReciveNumber=(MainList.get(Selected).Name+""+MainList.get(Selected).Number.toString()).toString()
+            }
+
             d.dismiss()
-            I.NewsSendSms("1", SendSms(),edit)
+
+
+            I.NewsSendSms("1",Temp,edit)
         }
         return d
     }
+
 
 
 
@@ -159,6 +257,7 @@ class Frag_Send(var act:Activity) : Fragment() {
         var  Edited=true
 
         var L=   database?.SendSmsDaoAccess()?.updateSendSms(number.Number.toString(),
+            number.Name.toString(),
             number.iddatabase!!
         )
 
@@ -179,7 +278,8 @@ class Frag_Send(var act:Activity) : Fragment() {
 
         var  Edited=true
 
-        var L=   database?.SendSmsDaoAccess()?.Delet_SendSms(number,
+        var L=   database?.SendSmsDaoAccess()?.Delet_SendSms(
+            number,
         )
 
 
@@ -221,7 +321,6 @@ class Frag_Send(var act:Activity) : Fragment() {
     }
 
 
-
     fun  EditNumber(number:SendSms){
         var D=DialappAdd("","","",object : Dial_App.Interface_new{
 
@@ -230,6 +329,8 @@ class Frag_Send(var act:Activity) : Fragment() {
                 if (Type.equals("1"))
                 {
                     Edit.Number=num.Number
+                    Edit.Name=num.Name
+
                     GlobalScope.launch{
                         var  Res= async {
                             Editnumber(Edit)
@@ -252,10 +353,6 @@ class Frag_Send(var act:Activity) : Fragment() {
             }
         }, requireContext(),true, number.Number.toString(),number).show()
     }
-
-
-
-
 
 
 

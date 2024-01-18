@@ -22,8 +22,8 @@ import com.Atiran.Anbar.Tables.SendSms
 
 
 
-   @Query("UPDATE SendSms SET Number = :Number WHERE iddatabase = :id2")
-   fun updateSendSms(Number:String,id2:Int) :Int
+   @Query("UPDATE SendSms SET Number = :Number , Name = :Name  WHERE iddatabase = :id2")
+   fun updateSendSms(Number:String,Name:String,id2:Int) :Int
 
 
     @Delete()

@@ -31,39 +31,55 @@ class Adapter_NumbersSend(var C:Context) : RecyclerView.Adapter<Adapter_NumbersS
     class view(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): view {
-         var V=LayoutInflater.from(C).inflate(R.layout.custom_tolid_items_barghashtkharid,parent,false)
+         var V=LayoutInflater.from(C).inflate(R.layout.custom_tolid_items_barghashtkharid_2,parent,false)
 
         return view(V)
     }
 
     override fun onBindViewHolder(holder: view, position: Int) {
-//
-//        var Item=list?.get(position)
-//
-//
-//        var textView3= holder.itemView.findViewById<TextView>(R.id.textView3)
-//        var imageView2= holder.itemView.findViewById<ImageView>(R.id.imageView2)
-//        var imageView= holder.itemView.findViewById<ImageView>(R.id.imageView)
-//
-//
-//
-//
-//        if (!Item?.Number.toString().isNullOrEmpty())
-//        {
-//           textView3.setText(Item?.Number)
-//        }
-//
-//
-//
-//
-//        imageView2.setOnClickListener {
-//            edit?.EditItem(Item!!)
-//        }
-//
-//        imageView.setOnClickListener {
-//            edit?.RemoveItem(Item!!)
-//        }
-//
+        var Item=list?.get(position)
+
+
+        var textView6= holder.itemView.findViewById<TextView>(R.id.textView6)
+        var textView3= holder.itemView.findViewById<TextView>(R.id.textView3)
+        var textView8= holder.itemView.findViewById<TextView>(R.id.textView8)
+        var imageView2= holder.itemView.findViewById<ImageView>(R.id.imageView2)
+        var imageView= holder.itemView.findViewById<ImageView>(R.id.imageView)
+
+
+
+
+        if (!Item?.Name.toString().isNullOrEmpty())
+        {
+            textView3.setText(Item?.Name)
+        }
+
+
+        if (!Item?.Number.toString().isNullOrEmpty())
+        {
+            textView6.setText(Item?.Number)
+        }
+
+        if (!Item?.NameReciveNumber.toString().isNullOrEmpty())
+        {
+            textView8.setText(Item?.NameReciveNumber)
+        }
+
+
+
+
+
+
+
+        imageView2.setOnClickListener {
+            edit?.EditItem(Item!!)
+        }
+
+        imageView.setOnClickListener {
+            edit?.RemoveItem(Item!!)
+        }
+
+
 
 
 

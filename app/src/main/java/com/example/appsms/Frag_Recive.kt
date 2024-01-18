@@ -14,11 +14,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.Atiran.Anbar.Tables.ReciveSms
 import com.Atiran.Anbar.Tables.SendSms
@@ -97,7 +99,9 @@ class Frag_Recive : Fragment() {
         d.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         var Close=view.findViewById<ImageView>(R.id.imageView3)
+        var spinner=view.findViewById<Spinner>(R.id.spinner)
 
+        spinner.isVisible=false
         var button=view.findViewById<TextView>(R.id.button)
         var editTextPhone=view.findViewById<TextView>(R.id.editTextPhone2)
         var editTextPhonename=view.findViewById<TextView>(R.id.editTextPhone)
@@ -173,6 +177,7 @@ class Frag_Recive : Fragment() {
         var  Edited=true
         var L=   database?.ReciveSmsDaoAccess()?.updateReciveSms(
             number.Number.toString(),
+            number.Name.toString(),
             number.iddatabase!!
         )
 
@@ -224,7 +229,7 @@ class Frag_Recive : Fragment() {
                         var Rs=Res.await();
                         if (Rs)
                         {
-                            GetAllSends();
+                            GetAllReciv();
                         }
 
 
@@ -260,7 +265,7 @@ class Frag_Recive : Fragment() {
                         var Rs=Res.await();
                         if (Rs)
                         {
-                            GetAllSends()
+                            GetAllReciv()
                         }
 
 
@@ -273,12 +278,12 @@ class Frag_Recive : Fragment() {
 
 
     @SuppressLint("NotifyDataSetChanged")
-    fun  GetAllSends(){
+    fun  GetAllReciv(){
 
         runBlocking {
             GlobalScope.launch{
                 var  Res= async {
-                    GetAllSendNumbers()
+                    GetAllRecivNumbers()
                 }
 
 
@@ -290,7 +295,7 @@ class Frag_Recive : Fragment() {
             }
         }
     }
-    suspend fun GetAllSendNumbers() : List<ReciveSms> {
+    suspend fun GetAllRecivNumbers() : List<ReciveSms> {
         return    database?.ReciveSmsDaoAccess()?.GetReciveSms()!!;
     }
 
@@ -335,7 +340,7 @@ class Frag_Recive : Fragment() {
 
 
 
-        GetAllSends();
+        GetAllReciv();
 
 
 
@@ -373,7 +378,7 @@ class Frag_Recive : Fragment() {
                                 var Rs=Res.await();
                                 if (Rs)
                                 {
-                                    GetAllSends()
+                                    GetAllReciv()
                                 }
 
 
