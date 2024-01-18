@@ -107,10 +107,7 @@ class Frag_Send(var act:Activity) : Fragment() {
 
 
 
-        if (boolean!!)
-        {
-            spinner.isVisible=false
-        }
+
 
         var ListItems=ArrayList<String>()
         var MainList= ArrayList<ReciveSms>()
@@ -149,8 +146,24 @@ class Frag_Send(var act:Activity) : Fragment() {
                         }
 
                         override fun onNothingSelected(parentView: AdapterView<*>?) {
-                            // در صورتی که هیچ موردی انتخاب نشده باشد
+                            if (boolean)
+                            {
+
+                            }else{
+                                if (ListItems.isNotEmpty())
+                                {
+                                    Selected=0
+                                }
+                            }
+
                         }
+                    }
+
+
+                    if (boolean!!)
+                    {
+                        Selected= edit.idNumberRecive!!
+                        spinner.setSelection(Selected)
                     }
 
                 }
@@ -216,12 +229,9 @@ class Frag_Send(var act:Activity) : Fragment() {
             var Temp=SendSms()
             Temp.Name=editTextName.text.toString()
             Temp.Number=editTextPhone.text.toString()
+            Temp.idNumberRecive=MainList.get(Selected).iddatabase
+            Temp.NameReciveNumber=(MainList.get(Selected).Name+""+MainList.get(Selected).Number.toString()).toString()
 
-            if (!boolean)
-            {
-                Temp.idNumberRecive=MainList.get(Selected).iddatabase
-                Temp.NameReciveNumber=(MainList.get(Selected).Name+""+MainList.get(Selected).Number.toString()).toString()
-            }
 
             d.dismiss()
 

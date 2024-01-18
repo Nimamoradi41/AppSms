@@ -9,6 +9,10 @@ import com.Atiran.Anbar.Tables.SendSms
     fun GetSendSms(): List<SendSms>
 
 
+    @Query("SELECT * from SendSms where iddatabase =:id")
+    fun GetSendSmsById(id:Int): List<SendSms>
+
+
 
 
 

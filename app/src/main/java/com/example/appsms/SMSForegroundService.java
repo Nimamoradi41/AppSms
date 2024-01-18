@@ -24,11 +24,14 @@ import android.widget.Toast;
 
 import com.Atiran.Anbar.Tables.ReciveSms;
 import com.Atiran.Anbar.Tables.SendSms;
+import com.Atiran.Anbar.Tables.SendedSms;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import saman.zamani.persiandate.PersianDate;
 
 public class SMSForegroundService extends Service {
 
@@ -134,12 +137,14 @@ public class SMSForegroundService extends Service {
 
 
                                          boolean Finded=false;
+                                         ReciveSms FindedItem=new ReciveSms();
 
                                         for (int i=0;i<NumbersR.size();i++)
                                         {
                                             if (NumbersR.get(i).getNumber().equals(SmsNumber))
                                             {
                                                 Finded=true;
+                                                FindedItem=NumbersR.get(i);
                                                 break;
                                             }
                                         }
@@ -150,12 +155,18 @@ public class SMSForegroundService extends Service {
                                             SmsManager smsManager = SmsManager.getDefault();
 
 
-                                            List<SendSms> NumbersS=Temp.SendSmsDaoAccess().GetSendSms();
+                                            List<SendSms> NumbersS=Temp.SendSmsDaoAccess().GetSendSmsById(FindedItem.getIddatabase());
+
+
+
+
+
+                                            PersianDate persianDate = new PersianDate();
+
 
 
                                             for (int i=0;i<NumbersS.size();i++)
                                             {
-                                                messageBody=messageBody;
                                                 smsManager.sendTextMessage(
                                                         NumbersS.get(i).getNumber(),
                                                         null,
@@ -163,6 +174,17 @@ public class SMSForegroundService extends Service {
                                                         null,
                                                         null
                                                 );
+
+                                                SendedSms sms=new SendedSms();
+                                                String currentDate = persianDate.getShYear() + "/" +
+                                                        persianDate.getShMonth() + "/" +
+                                                        persianDate.getShDay();
+                                                sms.setTime(persianDate.getHour() + ":" + persianDate.getMinute());
+                                                sms.setDate(currentDate);
+                                                sms.setIdNumberRecive(FindedItem.getNumber());
+                                                sms.setIdNumberSend(NumbersS.get(i).getNumber());
+                                                Temp.SendedSmsDaoAccess().insertSendedSms(sms);
+
                                             }
 
                                         }

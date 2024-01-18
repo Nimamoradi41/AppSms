@@ -10,13 +10,14 @@ import androidx.room.TypeConverters;
 import com.Atiran.Anbar.AccessDataBase.ReciveSmsDao;
 import com.Atiran.Anbar.AccessDataBase.SendSmsDao;
 
+import com.Atiran.Anbar.AccessDataBase.SendedSmsSmsDao;
 import com.Atiran.Anbar.Tables.ReciveSms;
 import com.Atiran.Anbar.Tables.SendSms;
+import com.Atiran.Anbar.Tables.SendedSms;
 
 
-
-@Database(entities = {ReciveSms.class, SendSms.class
-},exportSchema = false,version = 2)
+@Database(entities = {ReciveSms.class, SendSms.class, SendedSms.class
+},exportSchema = false,version = 3)
 
 abstract   public class dataabse extends RoomDatabase {
     static  String namedab="appsmsdatabase";
@@ -37,5 +38,6 @@ abstract   public class dataabse extends RoomDatabase {
 
     public abstract SendSmsDao SendSmsDaoAccess();
     public abstract ReciveSmsDao ReciveSmsDaoAccess();
+    public abstract SendedSmsSmsDao SendedSmsDaoAccess();
 
 }
