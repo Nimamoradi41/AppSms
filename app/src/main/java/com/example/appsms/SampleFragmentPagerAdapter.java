@@ -8,8 +8,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
-    final int PAGE_COUNT = 2;
-    private String tabTitles[] = new String[] { "Tab1", "Tab2" };
+    final int PAGE_COUNT = 3;
+    private String tabTitles[] = new String[] { "Tab1", "Tab2","Tat3" };
     private Context context;
     private Activity activity;
 
@@ -30,7 +30,11 @@ class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
          {
              return  new  Frag_Recive();
          }
-        return  new Frag_Send(activity);
+        if (position==1)
+        {
+            return  new  Frag_Send(activity);
+        }
+        return  new Frag_SendedSms(activity);
     }
 
 
