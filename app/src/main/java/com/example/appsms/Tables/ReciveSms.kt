@@ -7,7 +7,6 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "ReciveSms")
  class ReciveSms {
-
     @PrimaryKey(autoGenerate = true)
     @Nullable
     var iddatabase:Int ?=null

@@ -1,7 +1,8 @@
 package com.Atiran.Anbar.AccessDataBase
 
+
 import androidx.room.*
-import com.Atiran.Anbar.Tables.SendSms
+import com.example.appsms.Tables.SendSms
 
 @Dao
  public interface SendSmsDao {
@@ -26,8 +27,8 @@ import com.Atiran.Anbar.Tables.SendSms
 
 
 
-   @Query("UPDATE SendSms SET Number = :Number , Name = :Name  WHERE iddatabase = :id2")
-   fun updateSendSms(Number:String,Name:String,id2:Int) :Int
+   @Query("UPDATE SendSms SET Number = :Number , Name = :Name, idNumberRecive =:aa  WHERE iddatabase = :id2")
+   fun updateSendSms(Number:String,Name:String,aa:List<Int>,id2:Int) :Int
 
 
     @Delete()

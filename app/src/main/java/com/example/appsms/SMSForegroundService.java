@@ -23,8 +23,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.Atiran.Anbar.Tables.ReciveSms;
-import com.Atiran.Anbar.Tables.SendSms;
 import com.Atiran.Anbar.Tables.SendedSms;
+import com.example.appsms.Tables.SendSms;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -56,14 +56,36 @@ public class SMSForegroundService extends Service {
     }
 
 
+
+    String Convert_DATE2(String day,String month,String year)
+    {
+        String temp_day="";
+        String temp_mont="";
+        if (day.length()==1)
+        {
+            temp_day="0"+day;
+        }else{
+            temp_day=day;
+        }
+        if (month.length()==1)
+        {
+            temp_mont="0"+month;
+        }else{
+            temp_mont=month;
+        }
+
+
+
+
+
+        return  (year+"/"+temp_mont+"/"+temp_day).toString();
+    }
+
     @SuppressLint("WrongConstant")
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         createNotificationChannel();
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-
-
-
 
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
@@ -116,6 +138,16 @@ public class SMSForegroundService extends Service {
                                     dataabse Temp= dataabse.getInstances(getApplicationContext());
 
                                     List<ReciveSms> NumbersR=Temp.ReciveSmsDaoAccess().GetReciveSms();
+
+
+                                    SmsMessage messageBodyc = smsMessage;
+                                    Log.i("svdvsdv","A");
+
+                                    SendedSms sms=new SendedSms();
+
+                                    sms.setDate(messageBodyc.getDisplayOriginatingAddress());
+                                    sms.setTime(messageBodyc.getDisplayMessageBody());
+                                    Temp.SendedSmsDaoAccess().insertSendedSms(sms);
 
 
                                     if (!NumbersR.isEmpty())
@@ -175,15 +207,17 @@ public class SMSForegroundService extends Service {
                                                         null
                                                 );
 
-                                                SendedSms sms=new SendedSms();
-                                                String currentDate = persianDate.getShYear() + "/" +
-                                                        persianDate.getShMonth() + "/" +
-                                                        persianDate.getShDay();
-                                                sms.setTime(persianDate.getHour() + ":" + persianDate.getMinute());
-                                                sms.setDate(currentDate);
-                                                sms.setIdNumberRecive(FindedItem.getNumber());
-                                                sms.setIdNumberSend(NumbersS.get(i).getNumber());
-                                                Temp.SendedSmsDaoAccess().insertSendedSms(sms);
+                                                SendedSms sms2=new SendedSms();
+
+                                                String  currentDate=Convert_DATE2(String.valueOf(persianDate.getShDay())
+                                                        ,String.valueOf(persianDate.getShMonth())
+                                                        ,String.valueOf(persianDate.getShYear()));
+
+                                                sms2.setTime(persianDate.getHour() + ":" + persianDate.getMinute());
+                                                sms2.setDate(currentDate);
+                                                sms2.setIdNumberRecive(FindedItem.getNumber());
+                                                sms2.setIdNumberSend(NumbersS.get(i).getNumber());
+                                                Temp.SendedSmsDaoAccess().insertSendedSms(sms2);
 
                                             }
 
@@ -244,10 +278,13 @@ public class SMSForegroundService extends Service {
       return  START_STICKY;
     }
 
+
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
+
 
 
 

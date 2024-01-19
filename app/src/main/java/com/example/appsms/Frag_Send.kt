@@ -21,11 +21,11 @@ import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.Atiran.Anbar.Tables.ReciveSms
-import com.Atiran.Anbar.Tables.SendSms
+import com.example.appsms.Tables.SendSms
 import kotlinx.coroutines.*
 
 
@@ -33,12 +33,13 @@ import kotlinx.coroutines.*
 class Frag_Send(var act:Activity) : Fragment() {
 
     var adapter : Adapter_NumbersSend ?=null
+    var adapter3 : Adapter_itemRecvi ?=null
     var RecyclerviewSend : RecyclerView ?=null
     var AddSend : Button ?=null
     var  database : dataabse?=null
 
 
-    public fun Dialapp(S: String,S2:String,S3:String, I: Dial_App.Interface_new, context: Context,edit:SendSms): Dialog {
+    public fun Dialapp(S: String,S2:String,S3:String, I: Dial_App.Interface_new, context: Context,edit: SendSms): Dialog {
         var d = Dialog(context)
 
         val inflater = LayoutInflater.from(context)
@@ -86,7 +87,8 @@ class Frag_Send(var act:Activity) : Fragment() {
         return    database?.ReciveSmsDaoAccess()?.GetReciveSms()!!;
     }
 
-    public fun DialappAdd(S: String,S2:String,S3:String, I: Dial_App.Interface_new, context: Context,boolean: Boolean,S4: String,edit:SendSms): Dialog {
+    @SuppressLint("NotifyDataSetChanged")
+    public   fun DialappAdd(S: String, S2:String, S3:String, I: Dial_App.Interface_new, context: Context, boolean: Boolean, S4: String, edit:SendSms): Dialog {
         var d = Dialog(context)
 
         var Selected=-1
@@ -100,10 +102,30 @@ class Frag_Send(var act:Activity) : Fragment() {
 
         var Close=view.findViewById<ImageView>(R.id.imageView3)
         var spinner=view.findViewById<Spinner>(R.id.spinner)
+        var recyclerView=view.findViewById<RecyclerView>(R.id.recyclerView)
 
         var button=view.findViewById<TextView>(R.id.button)
         var editTextName=view.findViewById<TextView>(R.id.editTextPhone)
         var editTextPhone=view.findViewById<TextView>(R.id.editTextPhone2)
+
+        recyclerView.layoutManager=
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
+        adapter3= Adapter_itemRecvi(context)
+        recyclerView.adapter=adapter3
+
+        adapter3?.Click(object  :Adapter_itemRecvi.Edit{
+            override fun EditItem(edit: SendSms) {
+
+            }
+
+            override fun RemoveItem(edit: ModelA) {
+                adapter3?.list?.remove(edit)
+                adapter3?.notifyDataSetChanged()
+
+            }
+
+        })
+
 
 
 
@@ -111,6 +133,7 @@ class Frag_Send(var act:Activity) : Fragment() {
 
         var ListItems=ArrayList<String>()
         var MainList= ArrayList<ReciveSms>()
+        var TempList= ArrayList<ModelA>()
 
         runBlocking {
             GlobalScope.launch{
@@ -120,6 +143,7 @@ class Frag_Send(var act:Activity) : Fragment() {
 
 
                 var Rs=Res.await();
+
                 MainList= Rs as ArrayList<ReciveSms>
                 withContext(Dispatchers.Main) {
 
@@ -128,11 +152,12 @@ class Frag_Send(var act:Activity) : Fragment() {
                     }
 
 
-                    val adapter = ArrayAdapter(context, android.R.layout.simple_spinner_item,ListItems)
+                    val adapter = ArrayAdapter(context,android.R.layout.simple_spinner_item,ListItems)
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
 
 
+                    var b=true
                     spinner.adapter = adapter
                     spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                         override fun onItemSelected(
@@ -142,7 +167,24 @@ class Frag_Send(var act:Activity) : Fragment() {
                             id: Long
                         ) {
 
-                            Selected=position
+                            if (b)
+                            {
+                                var f=MainList.get(position)
+                                var sss=adapter3?.list?.find { it.id==f.iddatabase }
+
+                                if (sss==null)
+                                {
+                                    var ss=ModelA()
+                                    ss.id=f.iddatabase
+                                    ss.name=f.Name+" "+f.Number;
+
+                                    adapter3?.list?.add(ss)
+                                    adapter3?.notifyDataSetChanged()
+                                }
+
+                            }
+
+
                         }
 
                         override fun onNothingSelected(parentView: AdapterView<*>?) {
@@ -160,10 +202,35 @@ class Frag_Send(var act:Activity) : Fragment() {
                     }
 
 
-                    if (boolean!!)
+                    if (boolean)
                     {
-                        Selected= edit.idNumberRecive!!
-                        spinner.setSelection(Selected)
+                      var dd=ArrayList<ModelA>()
+
+
+                        edit.idNumberRecive.forEachIndexed { index, i ->
+                          var  r= MainList.find { i==it.iddatabase }
+                            if (r!=null)
+                            {
+                                var ss=ModelA()
+                                ss.id=r.iddatabase
+                                ss.name=r.Name+" "+r.Number;
+                                dd.add(ss)
+                            }
+                        }
+
+
+                        adapter3?.list=dd
+                        adapter3?.notifyDataSetChanged()
+                    }else{
+                        if (MainList.isNotEmpty())
+                        {
+                            var T=ModelA()
+                            T.id=MainList.get(0).iddatabase
+                            T.name=MainList.get(0).Name+" "+MainList.get(0).Number;
+                            TempList.add(T)
+                            adapter3?.list=TempList
+                            adapter3?.notifyDataSetChanged()
+                        }
                     }
 
                 }
@@ -215,22 +282,26 @@ class Frag_Send(var act:Activity) : Fragment() {
             }
 
 
-            if (!boolean)
-            {
-                if (Selected==-1)
+
+                if (adapter3?.list?.isEmpty()!!)
                 {
-                    Toast.makeText(requireContext(),"سرشماره دریافتی را وارد کنید",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(),"سرشماره دریافتی اضافه کنید ",Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
-            }
+
 
 
 
             var Temp=SendSms()
             Temp.Name=editTextName.text.toString()
             Temp.Number=editTextPhone.text.toString()
-            Temp.idNumberRecive=MainList.get(Selected).iddatabase
-            Temp.NameReciveNumber=(MainList.get(Selected).Name+""+MainList.get(Selected).Number.toString()).toString()
+            var sss=adapter3?.list?.map {
+                it.id
+            }?.toList()
+            Temp.idNumberRecive=sss
+
+//            Temp.idNumberRecive=MainList.get(Selected).iddatabase
+//            Temp.NameReciveNumber=(MainList.get(Selected).Name+""+MainList.get(Selected).Number.toString()).toString()
 
 
             d.dismiss()
@@ -266,8 +337,10 @@ class Frag_Send(var act:Activity) : Fragment() {
 
         var  Edited=true
 
-        var L=   database?.SendSmsDaoAccess()?.updateSendSms(number.Number.toString(),
+        var L=   database?.SendSmsDaoAccess()?.updateSendSms(
+            number.Number.toString(),
             number.Name.toString(),
+            number.idNumberRecive,
             number.iddatabase!!
         )
 
@@ -340,6 +413,7 @@ class Frag_Send(var act:Activity) : Fragment() {
                 {
                     Edit.Number=num.Number
                     Edit.Name=num.Name
+                    Edit.idNumberRecive=num.idNumberRecive
 
                     GlobalScope.launch{
                         var  Res= async {

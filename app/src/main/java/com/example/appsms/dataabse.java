@@ -12,13 +12,14 @@ import com.Atiran.Anbar.AccessDataBase.SendSmsDao;
 
 import com.Atiran.Anbar.AccessDataBase.SendedSmsSmsDao;
 import com.Atiran.Anbar.Tables.ReciveSms;
-import com.Atiran.Anbar.Tables.SendSms;
+
 import com.Atiran.Anbar.Tables.SendedSms;
+import com.example.appsms.Tables.SendSms;
 
 
 @Database(entities = {ReciveSms.class, SendSms.class, SendedSms.class
 },exportSchema = false,version = 3)
-
+@TypeConverters({Converters.class})
 abstract   public class dataabse extends RoomDatabase {
     static  String namedab="appsmsdatabase";
     static  dataabse instance;

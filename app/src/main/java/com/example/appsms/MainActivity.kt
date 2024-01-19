@@ -104,11 +104,10 @@ class MainActivity : AppCompatActivity() {
         tabLayout?.setupWithViewPager(viewPager);
         tabLayout?.getTabAt(0)?.setIcon(R.drawable.baseline_download_24)
         tabLayout?.getTabAt(1)?.setIcon(R.drawable.baseline_upload_24)
-        tabLayout?.getTabAt(1)?.setIcon(R.drawable.baseline_send_24)
+        tabLayout?.getTabAt(2)?.setIcon(R.drawable.baseline_send_24)
 
 
         materialSwitch?.setOnClickListener {
-
             var Per=CheckPermisionsApp()
             var ddd=materialSwitch?.isChecked
             if (materialSwitch?.isChecked!!)

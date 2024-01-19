@@ -53,6 +53,8 @@ dependencies {
 //    kapt ("android.arch.persistence.room:compiler:1.1.1")
     //noinspection GradleCompatible,GradleCompatible
     implementation ("androidx.room:room-guava:2.6.1")
+    implementation ("androidx.room:room-guava:2.6.1")
+    implementation("com.mohamadamin:persianmaterialdatetimepicker:1.2.1")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
     /// Room

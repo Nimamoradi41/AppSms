@@ -7,7 +7,6 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -23,8 +22,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.Atiran.Anbar.Tables.ReciveSms
-import com.Atiran.Anbar.Tables.SendSms
-import com.google.android.material.internal.ViewUtils.showKeyboard
+import com.example.appsms.Tables.SendSms
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -87,9 +85,9 @@ class Frag_Recive : Fragment() {
         ViewCompat.getWindowInsetsController(V)?.show(WindowInsetsCompat.Type.ime())
     }
     @SuppressLint("MissingInflatedId")
-    public fun DialappAdd(S: String, S2:String, S3:String, I: Dial_App.Interface_new, context: Context, boolean: Boolean, S4: String, edit: ReciveSms): Dialog {
+    public fun DialappAdd(S: String, S2:String, S3:String, I: Dial_App.Interface_new, context: Context, boolean: Boolean, S4: String, edit: ReciveSms):
+            Dialog {
         var d = Dialog(context)
-
         val inflater = LayoutInflater.from(context)
         val view: View = inflater.inflate(R.layout.custome_dial_app_add, null, false)
         d.setContentView(view)
@@ -100,8 +98,11 @@ class Frag_Recive : Fragment() {
 
         var Close=view.findViewById<ImageView>(R.id.imageView3)
         var spinner=view.findViewById<Spinner>(R.id.spinner)
-
+        var recyclerView=view.findViewById<RecyclerView>(R.id.recyclerView)
+        var textView9=view.findViewById<TextView>(R.id.textView9)
         spinner.isVisible=false
+        recyclerView.isVisible=false
+        textView9.isVisible=false
         var button=view.findViewById<TextView>(R.id.button)
         var editTextPhone=view.findViewById<TextView>(R.id.editTextPhone2)
         var editTextPhonename=view.findViewById<TextView>(R.id.editTextPhone)
@@ -215,8 +216,6 @@ class Frag_Recive : Fragment() {
             override fun NewsSendSms(Type: String, num: SendSms, Edit: SendSms) {
 
             }
-
-
             override fun NewsReciveSms(Type: String, num: ReciveSms, Edit: ReciveSms) {
                 if (Type.equals("1"))
                 {

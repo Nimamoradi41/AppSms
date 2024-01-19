@@ -1,7 +1,6 @@
 package com.Atiran.Anbar.AccessDataBase
 
 import androidx.room.*
-import com.Atiran.Anbar.Tables.SendSms
 import com.Atiran.Anbar.Tables.SendedSms
 
 @Dao

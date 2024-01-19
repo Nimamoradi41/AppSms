@@ -9,9 +9,7 @@
 
 
     
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height=""
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -33,9 +31,10 @@
             style="@style/Widget.MaterialComponents.Button.Icon"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
+            android:layout_width="0dp"
             android:layout_marginEnd="48dp"
             android:fontFamily="@font/iransansmoobile_fanum"
-            android:text="افزودن"
+            android:text="ردیافت مجدد"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -45,20 +44,19 @@
             app:layout_constraintEnd_toStartOf="@+id/textView11"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="MissingConstraints" />
+              />
 
         <TextView
             android:id="@+id/textView10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:text="تاریخ"
             android:fontFamily="@font/iransansmoobile_fanum"
+            android:text="تاریخ"
+            android:textColor="#5C5C5C"
             android:textSize="12sp"
             android:textStyle="bold"
-            android:textColor="#5C5C5C"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/imageView4"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -75,6 +73,15 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView10" />
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/baseline_arrow_drop_down_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
   
 </LinearLayout>

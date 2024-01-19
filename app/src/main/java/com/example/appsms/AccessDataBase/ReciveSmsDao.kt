@@ -2,7 +2,6 @@ package com.Atiran.Anbar.AccessDataBase
 
 import androidx.room.*
 import com.Atiran.Anbar.Tables.ReciveSms
-import com.Atiran.Anbar.Tables.SendSms
 
 @Dao
  public interface ReciveSmsDao {
