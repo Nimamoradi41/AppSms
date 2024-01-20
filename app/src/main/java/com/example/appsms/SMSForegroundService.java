@@ -140,14 +140,6 @@ public class SMSForegroundService extends Service {
                                     List<ReciveSms> NumbersR=Temp.ReciveSmsDaoAccess().GetReciveSms();
 
 
-                                    SmsMessage messageBodyc = smsMessage;
-                                    Log.i("svdvsdv","A");
-
-                                    SendedSms sms=new SendedSms();
-
-                                    sms.setDate(messageBodyc.getDisplayOriginatingAddress());
-                                    sms.setTime(messageBodyc.getDisplayMessageBody());
-                                    Temp.SendedSmsDaoAccess().insertSendedSms(sms);
 
 
                                     if (!NumbersR.isEmpty())
@@ -187,7 +179,7 @@ public class SMSForegroundService extends Service {
                                             SmsManager smsManager = SmsManager.getDefault();
 
 
-                                            List<SendSms> NumbersS=Temp.SendSmsDaoAccess().GetSendSmsById(FindedItem.getIddatabase());
+                                            List<SendSms> NumbersS=Temp.SendSmsDaoAccess().GetSendSms();
 
 
 
@@ -199,25 +191,29 @@ public class SMSForegroundService extends Service {
 
                                             for (int i=0;i<NumbersS.size();i++)
                                             {
-                                                smsManager.sendTextMessage(
-                                                        NumbersS.get(i).getNumber(),
-                                                        null,
-                                                        messageBody,
-                                                        null,
-                                                        null
-                                                );
+                                                if (NumbersS.get(i).getIdNumberRecive().contains(FindedItem.getIddatabase()))
+                                                {
+                                                    smsManager.sendTextMessage(
+                                                            NumbersS.get(i).getNumber(),
+                                                            null,
+                                                            messageBody,
+                                                            null,
+                                                            null
+                                                    );
 
-                                                SendedSms sms2=new SendedSms();
+                                                    SendedSms sms2=new SendedSms();
 
-                                                String  currentDate=Convert_DATE2(String.valueOf(persianDate.getShDay())
-                                                        ,String.valueOf(persianDate.getShMonth())
-                                                        ,String.valueOf(persianDate.getShYear()));
+                                                    String  currentDate=Convert_DATE2(String.valueOf(persianDate.getShDay())
+                                                            ,String.valueOf(persianDate.getShMonth())
+                                                            ,String.valueOf(persianDate.getShYear()));
 
-                                                sms2.setTime(persianDate.getHour() + ":" + persianDate.getMinute());
-                                                sms2.setDate(currentDate);
-                                                sms2.setIdNumberRecive(FindedItem.getNumber());
-                                                sms2.setIdNumberSend(NumbersS.get(i).getNumber());
-                                                Temp.SendedSmsDaoAccess().insertSendedSms(sms2);
+                                                    sms2.setTime(persianDate.getHour() + ":" + persianDate.getMinute());
+                                                    sms2.setDate(currentDate);
+                                                    sms2.setIdNumberRecive(FindedItem.getNumber());
+                                                    sms2.setIdNumberSend(NumbersS.get(i).getNumber());
+                                                    Temp.SendedSmsDaoAccess().insertSendedSms(sms2);
+                                                }
+
 
                                             }
 

@@ -110,7 +110,7 @@
                 android:fontFamily="@font/iransansmoobile_fanum"
                 android:gravity="left"
                 android:hint="091**"
-                android:inputType="phone"
+                android:inputType="text"
 
                 android:padding="8dp"
                 android:textColor="#222222"

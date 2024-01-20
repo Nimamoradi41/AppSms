@@ -109,7 +109,7 @@ class Frag_Send(var act:Activity) : Fragment() {
         var editTextPhone=view.findViewById<TextView>(R.id.editTextPhone2)
 
         recyclerView.layoutManager=
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, true);
         adapter3= Adapter_itemRecvi(context)
         recyclerView.adapter=adapter3
 
@@ -157,7 +157,7 @@ class Frag_Send(var act:Activity) : Fragment() {
 
 
 
-                    var b=true
+                    var b=false
                     spinner.adapter = adapter
                     spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                         override fun onItemSelected(
@@ -167,8 +167,29 @@ class Frag_Send(var act:Activity) : Fragment() {
                             id: Long
                         ) {
 
-                            if (b)
+                            if (boolean)
                             {
+                                if (b)
+                                {
+
+                                    var f=MainList.get(position)
+                                    var sss=adapter3?.list?.find { it.id==f.iddatabase }
+
+                                    if (sss==null)
+                                    {
+                                        var ss=ModelA()
+                                        ss.id=f.iddatabase
+                                        ss.name=f.Name+" - "+f.Number;
+
+                                        adapter3?.list?.add(ss)
+                                        adapter3?.notifyDataSetChanged()
+                                    }
+
+                                }
+
+                                b=true
+
+                            }else{
                                 var f=MainList.get(position)
                                 var sss=adapter3?.list?.find { it.id==f.iddatabase }
 
@@ -176,13 +197,13 @@ class Frag_Send(var act:Activity) : Fragment() {
                                 {
                                     var ss=ModelA()
                                     ss.id=f.iddatabase
-                                    ss.name=f.Name+" "+f.Number;
+                                    ss.name=f.Name+" - "+f.Number;
 
                                     adapter3?.list?.add(ss)
                                     adapter3?.notifyDataSetChanged()
                                 }
-
                             }
+
 
 
                         }
@@ -226,7 +247,7 @@ class Frag_Send(var act:Activity) : Fragment() {
                         {
                             var T=ModelA()
                             T.id=MainList.get(0).iddatabase
-                            T.name=MainList.get(0).Name+" "+MainList.get(0).Number;
+                            T.name=MainList.get(0).Name+" - "+MainList.get(0).Number;
                             TempList.add(T)
                             adapter3?.list=TempList
                             adapter3?.notifyDataSetChanged()

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -91,7 +92,7 @@ class Frag_SendedSms(var act:Activity) : Fragment() {
         var MainView=  inflater.inflate(R.layout.fragment_frag__sendedsms, container, false)
 
         database= dataabse.getInstances(act)
-
+        textView11=MainView.findViewById(R.id.textView11);
 
         val persianDate = PersianDate()
           currentDate=
@@ -109,7 +110,7 @@ class Frag_SendedSms(var act:Activity) : Fragment() {
         }
         GetAllSends();
         RecyclerviewSend=MainView.findViewById(R.id.RecyclerviewSend);
-        textView11=MainView.findViewById(R.id.textView11);
+
         AddSend=MainView.findViewById(R.id.AddSend);
 
 
@@ -122,28 +123,34 @@ class Frag_SendedSms(var act:Activity) : Fragment() {
 
         textView11?.setOnClickListener {
 
-//            val datePickerDialog: DatePickerDialog = com.mohamadamin.persianmaterialdatetimepicker.date.DatePickerDialog.newInstance(
-//                object : com.mohamadamin.persianmaterialdatetimepicker.date.DatePickerDialog.OnDateSetListener{
-//                    fun onDateSet(
-//                        view: com.mohamadamin.persianmaterialdatetimepicker.date.DatePickerDialog?,
-//                        year: Int,
-//                        monthOfYear: Int,
-//                        dayOfMonth: Int
-//                    ) {
-//                        textView11?.setText(Convert_DATE2(dayOfMonth.toString(),(monthOfYear+1).toString(),year.toString()))
-//
-//                        currentDate=Convert_DATE2(dayOfMonth.toString(),(monthOfYear+1).toString(),year.toString()).toString()
-//                        Temp_Year_1=year
-//                        Temp_Month_1=monthOfYear
-//                        Temp_Day_1=dayOfMonth
-//
-//                    }
-//                },
-//                Temp_Day_1,
-//                Temp_Month_1,
-//                Temp_Year_1
-//            )
-//            datePickerDialog.show(fragmentManager, "Datepickerdialog")
+            Log.i("Dvsdvf", Temp_Day_1.toString())
+            Log.i("Dvsdvf", Temp_Month_1.toString())
+            Log.i("Dvsdvf", Temp_Year_1.toString())
+
+            val datePickerDialog: com.mohamadamin.persianmaterialdatetimepicker.date.DatePickerDialog? = com.mohamadamin.persianmaterialdatetimepicker.date.DatePickerDialog.newInstance(
+                object : com.mohamadamin.persianmaterialdatetimepicker.date.DatePickerDialog.OnDateSetListener{
+                    override fun onDateSet(
+                        view: com.mohamadamin.persianmaterialdatetimepicker.date.DatePickerDialog?,
+                        year: Int,
+                        monthOfYear: Int,
+                        dayOfMonth: Int
+                    ) {
+                        textView11?.setText(Convert_DATE2(dayOfMonth.toString(),(monthOfYear+1).toString(),year.toString()))
+
+                        currentDate=Convert_DATE2(dayOfMonth.toString(),(monthOfYear+1).toString(),year.toString()).toString()
+                        Temp_Year_1=year
+                        Temp_Month_1=monthOfYear
+                        Temp_Day_1=dayOfMonth
+
+                    }
+                },
+                Temp_Year_1,
+                Temp_Month_1,
+                Temp_Day_1,
+
+            )
+            datePickerDialog?.show(act.fragmentManager, "Datepickerdialog")
+
         }
 
 
