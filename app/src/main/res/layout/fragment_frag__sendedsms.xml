@@ -34,7 +34,7 @@
             android:layout_width="0dp"
             android:layout_marginEnd="48dp"
             android:fontFamily="@font/iransansmoobile_fanum"
-            android:text="ردیافت مجدد"
+            android:text="دریافت مجدد"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="bold"
