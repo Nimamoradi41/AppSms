@@ -156,6 +156,11 @@ public class SMSForegroundService extends Service {
                                             }
                                         }
 
+                                        if (SmsNumber.startsWith("98"))
+                                        {
+                                            SmsNumber=SmsNumber.replace("98","");
+                                        }
+
 
 
 
@@ -165,7 +170,7 @@ public class SMSForegroundService extends Service {
 
                                         for (int i=0;i<NumbersR.size();i++)
                                         {
-                                            if (NumbersR.get(i).getNumber().equals(SmsNumber))
+                                            if (NumbersR.get(i).getNumber().trim().equals(SmsNumber))
                                             {
                                                 Finded=true;
                                                 FindedItem=NumbersR.get(i);
