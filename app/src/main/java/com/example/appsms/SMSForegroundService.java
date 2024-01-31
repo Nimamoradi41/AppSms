@@ -159,6 +159,10 @@ public class SMSForegroundService extends Service {
                                         if (SmsNumber.startsWith("98"))
                                         {
                                             SmsNumber=SmsNumber.replace("98","");
+                                            if (!SmsNumber.startsWith("0"))
+                                            {
+                                                SmsNumber="0"+SmsNumber;
+                                            }
                                         }
 
 
